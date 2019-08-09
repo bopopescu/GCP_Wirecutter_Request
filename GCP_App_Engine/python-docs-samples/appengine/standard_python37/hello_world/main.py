@@ -1,8 +1,4 @@
 from google.appengine.api import urlfetch
-# import requests
-
-# response = requests.get("https://api.thedogapi.com/v1/breeds"); 
-
 
 try:
    form_data = urllib.urlencode(UrlPostHandler.form_fields)
@@ -21,10 +17,6 @@ try:
    self.response.write(result.content)
 except urlfetch.Error:
    logging.exception('Caught exception fetching url')
-
-
-
-
 
 
 
