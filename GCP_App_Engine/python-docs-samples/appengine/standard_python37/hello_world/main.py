@@ -1,4 +1,3 @@
-  
 # Copyright 2016 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +14,9 @@
 
 # [START app]
 import logging
+from urllib3 import PoolManager
+from urllib3.contrib.appengine import AppEngineManager, is_appengine_sandbox
 
-from flask import Flask
-
-# [START imports]
 import requests
 import requests_toolbelt.adapters.appengine
 
@@ -27,17 +25,18 @@ import requests_toolbelt.adapters.appengine
 requests_toolbelt.adapters.appengine.monkeypatch()
 # [END imports]
 
-app = Flask(__name__)
-
-
 @app.route('/')
 def index():
-    # [START requests_get]
+
     url = 'https://storage.googleapis.com/nyt-ads-static-assets/ads/adplatforms/HD_Source_150080.json'
-    response = requests.get(url)
-    response.raise_for_status()
-    return response.text
-    # [END requests_get]
+    if is_appengine_sandbox():
+        # AppEngineManager uses AppEngine's URLFetch API behind the scenes
+        http = AppEngineManager()
+    else:
+        # PoolManager uses a socket-level API behind the scenes
+        http = PoolManager()
+
+    resp = http.request('GET', url)
 
 
 @app.errorhandler(500)
@@ -47,13 +46,3 @@ def server_error(e):
     An internal error occurred: <pre>{}</pre>
     See logs for full stacktrace.
     """.format(e), 500
-# [END app]
-
-
-
-
-# Error - file: 'file:///Users/208414/Desktop/GithubRepos/GCP_Wirecutter_Request/GCP_App_Engine/python-docs-samples/appengine/standard_python37/hello_world/main.py'
-# severity: 'Error'
-# message: 'E0401:Unable to import 'requests_toolbelt.adapters.appengine''
-# at: '23,1'
-# source: 'pylint'
