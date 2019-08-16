@@ -12,6 +12,7 @@ import requests_toolbelt.adapters.appengine
 requests_toolbelt.adapters.appengine.monkeypatch()
 # [END imports]
 app = Flask(__name__)
+
 @app.route('/')
 def index():
 
@@ -26,6 +27,8 @@ def index():
     resp = http.request('GET', url)
 
 
+    return resp.data
+ 
 @app.errorhandler(500)
 def server_error(e):
     logging.exception('An error occurred during a request.')
