@@ -21,7 +21,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
 
-    url = 'https://storage.googleapis.com/nyt-ads-static-assets/ads/adplatforms/HD_Source_150080.json'
+    url = 'https://phoenix.submarineleisureclub.com/api/1.0/sources/1322'
     if is_appengine_sandbox():
         # AppEngineManager uses AppEngine's URLFetch API behind the scenes
         http = AppEngineManager()
